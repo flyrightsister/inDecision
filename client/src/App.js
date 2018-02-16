@@ -19,7 +19,7 @@ class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <div>
+        <div className="app-parent">
           <Switch>
             <Route exact path="/" render={() => (
               (this.state.loggedIn !== "") ? (

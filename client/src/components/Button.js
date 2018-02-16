@@ -11,15 +11,10 @@ export default class Button extends Component {
   }
 
   handleClick() {
-    if(this.state.bgColor === '#222') {
-      this.setState({
-        bgColor: '#FF95C7'
-      })
-      } else {
-         this.setState({
-        bgColor: '#222'
-      })
-    }
+    const bgColor = (this.state.bgColor === '#222') 
+      ? '#FF95C7'
+      : '#222'
+    this.setState({ bgColor })
   }
 
   render() {

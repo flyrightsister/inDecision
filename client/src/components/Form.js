@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import StarRatingComponent from 'react-star-rating-component'
 import Slider from 'react-rangeslider'
-import Button from '../components/Button'
 import axios from 'axios'
+import Button from '../components/Button'
 import {filterBusinessesAndReturnOne} from '../util/filterBusinessesAndReturnOne'
 import {useAccessToken} from '../util/lyftAuth'
-import '../App.css'
+// import '../App.css'
 
 export default class Form extends Component {
   constructor(props, context) {
@@ -53,6 +53,11 @@ export default class Form extends Component {
       return useAccessToken(destinationObj.destinationLatitude, destinationObj.destinationLongitude)
     })
     .then(lyftRideRequest => {
+      if (!lyftRideRequest) {
+        // handle error here and return
+        alert('you already called a lyft, loser')
+        return
+      }
       console.log("Lyft Ride Request Object::::    \n", lyftRideRequest)
       console.log("destination::::    \n", destinationName, destinationLocation)
       alert(`You're heading to ${destinationName}, located at ${destinationLocation}. \nYour Lyft is on it's way!`)
@@ -86,8 +91,41 @@ export default class Form extends Component {
     this.setState({price: value})
   }
 
+  slider() {
+    return (
+      <div className="uk-margin-top slider">
+      <Slider
+        min={1}
+        max={10}
+        step={1}
+        value={this.state.distance}
+        orientation={"horizontal"}
+        tooltip={true}
+        labels={{1: '1 mile', 10: '10 miles'}}
+        onChange={this.handleSliderChange.bind(this)}
+      />
+      </div>
+    )
+  }
+
   render() {
     const { rating, price, distance, food, drinks, latitude, longitude } = this.state
+
+    const starRating = ( 
+      <div className="uk-margin-bottom uk-margin-top">
+      <label>
+       <StarRatingComponent
+      name="rate2"
+      starCount={4}
+      starColor= '#FF95C7'
+      emptyStarColor='#666'
+      value={price}
+      renderStarIcon={() => <span>$</span>}
+      onStarClick={this.onMoneyClick.bind(this)}
+    />
+    </label>
+    </div>
+    )
 
     return (
       <div >
@@ -115,31 +153,8 @@ export default class Form extends Component {
             </label>
           </div>
           <div className="uk-container">
-            <div className="uk-margin-top slider">
-              <Slider
-                min={1}
-                max={10}
-                step={1}
-                value={distance}
-                orientation={"horizontal"}
-                tooltip={true}
-                labels={{1: '1 mile', 10: '10 miles'}}
-                onChange={this.handleSliderChange.bind(this)}
-              />
-            </div>
-            <div className="uk-margin-bottom uk-margin-top">
-              <label>
-                <StarRatingComponent
-                  name="rate2"
-                  starCount={4}
-                  starColor= '#FF95C7'
-                  emptyStarColor='#666'
-                  value={price}
-                  renderStarIcon={() => <span>$</span>}
-                  onStarClick={this.onMoneyClick.bind(this)}
-                />
-              </label>
-            </div>
+              {this.slider()}
+              {starRating}
           </div>
           <button className="uk-margin-large-bottom button uk-button uk-button-secondary" type="submit">Call a Lyft!</button>
         </form>

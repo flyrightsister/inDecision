@@ -23,11 +23,11 @@ export default class LoginForm extends Component {
       alert("Geolocation is not supported by this browser. Use Chrome, silly")
     }
 
-    const success = (position) => {
+    const success = ({ coords }) => {
       // const latitude  = position.coords.latitude;
       // const longitude = position.coords.longitude;
-      localStorage.setItem("originLat", position.coords.latitude)
-      localStorage.setItem("originLng", position.coords.longitude)
+      localStorage.setItem("originLat", coords.latitude)
+      localStorage.setItem("originLng", coords.longitude)
     }
 
     const error = () => {
@@ -37,13 +37,13 @@ export default class LoginForm extends Component {
     navigator.geolocation.getCurrentPosition(success, error)
   }
 
-  handleEmailChange(event) {
-    this.setState({emailValue: event.target.value})
-  }
+  // handleEmailChange(event) {
+  //   this.setState({emailValue: event.target.value})
+  // }
 
-  handlePasswordChange(event) {
-    this.setState({passwordValue: event.target.value})
-  }
+  // handlePasswordChange(event) {
+  //   this.setState({passwordValue: event.target.value})
+  // }
 
   // handleFormSubmit(event) {
   //   event.preventDefault()
